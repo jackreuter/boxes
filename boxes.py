@@ -15,7 +15,9 @@ class Game:
         self.boardSize = boardSize
         self.turnOver = False
         self.moveCount = 0
+
         ##board array stored as array of triples. The triples represent points.
+        ##northwest corner is (0,0)
         ##(x,y,z) where x represents eastern wall, y southern, z square control
         ##x or y==0 indicates no wall
         ##x or y==1 player 1 built wall
@@ -24,6 +26,7 @@ class Game:
         ##eastern boundary points cannot have eastern wall
         ##southern boundary points cannot have southern wall
         ##the southeast corner is always (-1,-1,-1)
+
         self.boardArr = [[[0,0,0] for i in range(self.boardSize)] for j in range(self.boardSize)]
         for i in range(self.boardSize):
             self.boardArr[self.boardSize-1][i] = [0,-1,-1]
@@ -37,7 +40,7 @@ class Game:
             for j in range(self.boardSize):
 
                 ##grab box data as triple
-                box_data = self.boardArr[i/ASCII_BOX_HEIGHT][j]
+                box_data = self.boardArr[int(i/ASCII_BOX_HEIGHT)][j]
                 if i%ASCII_BOX_HEIGHT==0:
                     ##line with dots
                     if box_data[0]>0:
@@ -85,7 +88,6 @@ class Game:
             self.boardArr[row][col-1][2] = player
             self.turnOver = False
 
-
     def checkBoxFull(self, row, col):
         #check if box has all four edges
         if row >= self.boardSize-1 or col >= self.boardSize-1 or row < 0 or col < 0:
@@ -98,7 +100,7 @@ class Game:
     def displayBoardArray(self):
         #print self.boardArray nicely for debugging
         for i in range(self.boardSize):
-            print self.boardArr[i]
+            print(self.boardArr[i])
 
     def takeTurn(self, player):
         #take turn, input player
@@ -129,18 +131,20 @@ class Game:
                 if entry[2]==2:
                     player2Total += 1
 
-        print player1Total
-        print player2Total
+        print(player1Total)
+        print(player2Total)
         
         if player1Total > player2Total:
-            print "Player 1 wins"
+            print("Player 1 wins")
         elif player2Total > player1Total:
-            print "Player 2 wins"
+            print("Player 2 wins")
         else:
-            print "TIE"
+            print("TIE")
 
-import testBot as t
-import randoMan as r
-g = Game(r.RandoMan(),r.RandoMan(),10)
+import testBot
+import randoMan
+import simpleBot
+
+g = Game(randoMan.RandoMan(), simpleBot.SimpleBot(), 10)
 g.run()
 
